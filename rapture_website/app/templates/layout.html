@@ -2,48 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RAPTURE</title>
+    <title>SMILE</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <nav class="bg-white shadow-md p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-blue-500">RAPTURE</a>
-            <ul class="flex space-x-4">
-                <li><a href="/new" class="text-blue-500 hover:text-blue-700">New Experiment</a></li>
-                <li><a href="/status" class="text-blue-500 hover:text-blue-700">Experiment Status</a></li>
-                {% if 'loggedin' in session %}
-                    {% if 'admin' in session %}
-                        <li><a href="/admin" class="text-blue-500 hover:text-blue-700">Admin</a></li>
-                    {% else %}
-                        <li><a href="/account" class="text-blue-500 hover:text-blue-700">Account</a></li>
-                    {% endif %}
-                    <li><a href="/logout" class="text-blue-500 hover:text-blue-700">Log Out</a></li>
+<div class="navbar">
+    <a class="nav-title" href="/">RAPTURE</a>
+    <nav>
+        <ul>
+            <li><a href="/new">New Experiment</a></li>
+            <li><a href="/status">Experiment Status</a></li>
+            {% if 'loggedin' in session %}
+                {% if 'admin' in session %}
+                    <li><a href="/admin">Admin</a></li>
                 {% else %}
-                    <li><a href="/login" class="text-blue-500 hover:text-blue-700">Log In</a></li>
+                    <li><a href="/account">Account</a></li>
                 {% endif %}
-            </ul>
-        </div>
-    </nav>
-    <div class="container mx-auto p-4">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
+                <li><a href="/logout">Log Out</a></li>
+            {% else %}
+                <li><a href="/login">Log In</a></li>
             {% endif %}
-        {% endwith %}
-        {% block content %}
-        {% endblock %}
-    </div>
+        </ul>
+    </nav>
+</div>
+<body>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                <div class="message-text">{{ message }}</div>
+                <div class="close-btn" onclick="this.parentElement.style.display='none';">&times;</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% block content %}
+{% endblock %}
 </body>
 </html>
-
-
-
-
-
-
-

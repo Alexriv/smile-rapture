@@ -1,20 +1,21 @@
 {% extends 'layout.html' %}
-
 {% block content %}
-    <h2 class="text-2xl font-bold mb-4">Experiment Status</h2>
+    <h2>Experiment Status</h2>
     <p>Logged in as <strong>{{ user.name_id }}</strong></p>
     {% if user.experiment_ids %}
-        <ul class="space-y-6">
+        <ul class="status-pane-list">
             {% for experiment in experiments %}
-                <li class="bg-white p-6 rounded-lg shadow-md">
-                    <div id="experiment-{{ experiment.experiment_uuid }}">
-                        <h2 class="text-xl font-bold">
-                            <a class="text-blue-500 hover:text-blue-700" href="/experiment/{{ experiment.experiment_uuid }}">{{ experiment.name }}</a>
-                        </h2>
-                        <p class="mt-2">Created by <strong>{{ experiment.created_by }}</strong> at <strong>{{ ts_formatted(experiment.created_at) }}</strong></p>
-                        <div id="status-{{ experiment.experiment_uuid }}" hx-get="/experiment/{{ experiment.experiment_uuid }}/status/" hx-trigger="every 1s" hx-target="this">
+                <li class="status-pane-li">
+                    <div class="status-pane-div" id="experiment-{{ experiment.experiment_uuid }}">
+                        <h2><a style="text-decoration: none"
+                               href="/experiment/{{ experiment.experiment_uuid }}">{{ experiment.name }}</a></h2>
+                        <p>Created by <strong>{{ experiment.created_by }}</strong> at
+                            <strong>{{ ts_formatted(experiment.created_at) }}</strong></p>
+                        <div id="status-{{ experiment.experiment_uuid }}"
+                             hx-get="/experiment/{{ experiment.experiment_uuid }}/status/"
+                             hx-trigger="every 1s" hx-target="this">
                             <div id="status-{{ experiment.experiment_uuid }}">
-                                <p class="mt-2">Status: <strong>{{ experiment.status.name }}</strong></p>
+                                <p>Status: <strong>{{ experiment.status.name }}</strong></p>
                             </div>
                         </div>
                     </div>
@@ -25,4 +26,3 @@
         <p>No experiments are currently available.</p>
     {% endif %}
 {% endblock %}
-

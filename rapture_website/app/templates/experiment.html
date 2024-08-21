@@ -1,23 +1,27 @@
 {% extends 'layout.html' %}
-
 {% block content %}
-    <ul class="space-y-6">
-        <li class="bg-white p-6 rounded-lg shadow-md">
-            <div>
-                <h2 class="text-xl font-bold">{{ experiment.name }}</h2>
-                <p class="mt-2">Created by <strong>{{ experiment.created_by }}</strong> at <strong>{{ ts_formatted(experiment.created_at) }}</strong></p>
-                <p class="mt-2">UUID: <strong>{{ experiment.experiment_uuid }}</strong></p>
+    <ul class="status-pane-list">
+        <li class="status-pane-li">
+            <div class="status-pane-div">
+                <h2>{{ experiment.name }}</h2>
+                <p>Created by <strong>{{ experiment.created_by }}</strong> at
+                    <strong>{{ ts_formatted(experiment.created_at) }}</strong></p>
+                <p>UUID: <strong>{{ experiment.experiment_uuid }}</strong></p>
 
-                <div id="status-{{ experiment.experiment_uuid }}" hx-get="/experiment/{{ experiment.experiment_uuid }}/status/" hx-trigger="every 1s" hx-target="this">
+                <div id="status-{{ experiment.experiment_uuid }}"
+                     hx-get="/experiment/{{ experiment.experiment_uuid }}/status/"
+                     hx-trigger="every 1s" hx-target="this">
                     <div id="status-{{ experiment.experiment_uuid }}">
-                        <p class="mt-2">Status: <strong>{{ experiment.status.name }}</strong></p>
+                        <p>Status: <strong>{{ experiment.status.name }}</strong></p>
                     </div>
                 </div>
 
-                <p class="mt-2">Node Count: <strong>{{ experiment.nodes|length }}</strong></p>
+                <p>Node Count: <strong>{{ experiment.nodes|length }}</strong></p>
 
-                <h4 class="mt-4 text-lg font-semibold">Results:</h4>
-                <div id="results-{{ experiment.experiment_uuid }}" class="terminal bg-black text-limegreen p-4 rounded mt-2" hx-get="/experiment/{{ experiment.experiment_uuid }}/results/" hx-trigger="every 1s" hx-target="this">
+                <h4>Results:</h4>
+                <div id="results-{{ experiment.experiment_uuid }}" class="terminal"
+                     hx-get="/experiment/{{ experiment.experiment_uuid }}/results/" hx-trigger="every 1s"
+                     hx-target="this">
                     {% if experiment.results %}
                         <div class="terminal">
                             <div class="log-content">
@@ -34,21 +38,26 @@
         </li>
         {% for node in experiment.nodes %}
             {% set node_index = loop %}
-            <li class="bg-white p-6 rounded-lg shadow-md">
-                <div>
-                    <h2 class="text-xl font-bold">Node {{ node_index.index }}</h2>
-                    <p class="mt-2">Type: <strong>{{ node.type }}</strong></p>
+            <li class="status-pane-li">
+                <div class="status-pane-div">
+                    <h2>Node {{ node_index.index }}</h2>
+                    <p>Type: <strong>{{ node.type }}</strong></p>
                     {% for container in node.containers %}
                         {% set container_index = loop %}
-                        <div class="bg-gray-100 p-4 rounded mt-4">
-                            <h3 class="text-lg font-semibold">Container {{ container_index.index }}</h3>
-                            <p class="mt-2">Name: <strong>{{ container.name }}</strong></p>
-                            <p class="mt-2">Hostname: <strong>{{ container.name }}-svc.{{ experiment.created_by }}</strong></p>
-                            <p class="mt-2">Status: <strong>{{ container.status.name }}</strong></p>
-                            <p class="mt-2">Ports: <strong>{% for port in container.ports %} {{ port|string }}{% if not loop.last %}, {% endif %}{% endfor %}</strong></p>
+                        <div class="status-pane-div"
+                             style="background: #f4f4f4; margin-bottom: 20px; min-width: 300px; width: auto">
+                            <h3 style="margin: 0">Container {{ container_index.index }}</h3>
+                            <p>Name: <strong>{{ container.name }}</strong></p>
+                            <p>Hostname: <strong>{{ container.name }}-svc.{{ experiment.created_by }}</strong></p>
+                            <p>Status: <strong>{{ container.status.name }}</strong></p>
+                            <p>Ports:<strong>{% for port in container.ports %}
+                                {{ port|string }}{% if not loop.last %},{% endif %}{% endfor %}</strong></p>
 
-                            <h4 class="mt-4 text-lg font-semibold">stdout log:</h4>
-                            <div id="stdout-{{ container.registry_tag }}" class="terminal bg-black text-limegreen p-4 rounded mt-2" hx-get="/experiment/{{ experiment.experiment_uuid }}/{{ container.registry_tag }}/stdout/" hx-trigger="every 1s" hx-target="this">
+                            <h4>stdout log:</h4>
+                            <div id="stdout-{{ container.registry_tag }}" class="terminal"
+                                 hx-get="/experiment/{{ experiment.experiment_uuid }}/{{ container.registry_tag }}/stdout/"
+                                 hx-trigger="every 1s"
+                                 hx-target="this">
                                 {% if container.stdout_log %}
                                     <div class="terminal">
                                         <div class="log-content">
@@ -68,6 +77,3 @@
         {% endfor %}
     </ul>
 {% endblock %}
-
-              
-
