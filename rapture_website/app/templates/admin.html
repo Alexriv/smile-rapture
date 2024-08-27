@@ -1,8 +1,7 @@
 {% extends 'layout.html' %}
 {% block content %}
     <style>
-        a
-        button {
+        a, button {
             background-color: #007bff;
             color: white;
             padding: 10px 20px;
@@ -26,7 +25,7 @@
             <p>Nodes Alive: <strong>{{ raw_nodes_count }}</strong></p>
         </div>
         <a href="{{ url_for('admin.admin_view') }}" style="text-decoration: none">
-            <button onclick="">Update Status</button>
+            <button>Update Status</button>
         </a>
     </div>
     <div class="status-pane-div" style="margin-bottom: 20px">
@@ -36,7 +35,7 @@
                 {% set node_index = loop.index0 %}
                 <li class="status-pane-li">
                     <div class="status-pane-div" style="background: #f4f4f4;">
-                        <h2>Node {{ node_index.index }}</h2>
+                        <h2>Node {{ node_index }}</h2>
                         <p>Type: <strong>{{ node.type }}</strong></p>
                         <p>Hostname: <strong>{{ node.hostname }}</strong></p>
                         <p>Last Active: <strong>{{ node.hostname }}</strong></p>
@@ -88,40 +87,41 @@
                                     ({{ node.nickname }} : {{ node.type.name }}):</label>
                                 <select id="sel-{{ exp.experiment_uuid }}-{{ node_index }}"
                                         name="sel-{{ exp.experiment_uuid }}-{{ node_index }}">
-                                    {% for node in nodes %}
-                                        <option value="{{ node.hostname }}">{{ node.hostname }}</option>
+                                    {% for node_option in nodes %}
+                                        <option value="{{ node_option.hostname }}">{{ node_option.hostname }}</option>
                                     {% endfor %}
                                 </select>
                             {% endfor %}
                             <button type="button" id="{{ exp.experiment_uuid }}"
-                                    onclick="buttonPressed('{{ exp.experiment_uuid }}')">Start
-                                Experiment
+                                    onclick="buttonPressed('{{ exp.experiment_uuid }}')">Start Experiment
                             </button>
                             <script type="text/javascript">
                                 let socket = io();
 
-                                // When the button is pressed, send the experiment start signal
+                                // Function to start an experiment when the button is pressed
                                 function buttonPressed(uuid) {
+                                    // Construct the node assignments array
+                                    var nodeAssignment = [];
+                                    //{% for node in exp.nodes %}
+                                        var nodeValue = document.getElementById('sel-{{ exp.experiment_uuid }}-{{ loop.index0 }}').value;
+                                        nodeAssignment.push(nodeValue);
+                                    //{% endfor %}
+
+                                    // Emit the socket event with the UUID and node assignments
                                     socket.emit('start_exp_press', {
                                         id: uuid,
-                                        node_assignment: [
-                                            {% for node in exp.nodes %}
-                                                {% set node_index = loop.index0 %}
-                                                document.getElementById('sel-{{ exp.experiment_uuid }}-{{ node_index }}').value,
-                                            {% endfor %}
-                                        ]
+                                        node_assignment: nodeAssignment
                                     });
                                 }
 
-                                // Every 1 seconds, check the status of the experiment
+                                // Every 1 second, check the status of the experiment
                                 setInterval(function () {
                                     socket.emit('exp_status_request', {id: '{{ exp.experiment_uuid }}'});
                                 }, 1000);
 
-                                // Update the status of the experiment (also check to make sure UUID matches
+                                // Update the status of the experiment
                                 socket.on('exp_status_update', function (data) {
                                     let statusElement = document.getElementById('status-{{ exp.experiment_uuid }}');
-
                                     if (data.id === '{{ exp.experiment_uuid }}') {
                                         statusElement.innerHTML = data.status;
                                     }
@@ -140,7 +140,7 @@
         <ul class="status-pane-list">
             {% for exp in experiments %}
                 <li class="status-pane-li">
-                    <div class="status-pane-div" style="background: #f4f4f4; {# display: flex;#}
+                    <div class="status-pane-div" style="background: #f4f4f4;
                             flex-flow: row;
                             justify-content: space-between;">
                         <div>
@@ -202,3 +202,7 @@
         </ul>
     </div>
 {% endblock %}
+
+
+
+

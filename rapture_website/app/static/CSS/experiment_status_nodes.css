@@ -1,0 +1,92 @@
+/* Status Pane */
+.status-pane-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.status-pane-li {
+    margin-bottom: 20px;
+}
+
+.status-pane-div {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.status-pane-div h2, .status-pane-div h3, .status-pane-div h4 {
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.status-pane-div p {
+    margin: 5px 0;
+}
+
+/* Terminal Output */
+.terminal {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: monospace;
+    margin-top: 10px;
+}
+
+.terminal .log-content {
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+/* Dropdown Styling */
+.dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Button Styling */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Success Message */
+span[id^="success-"] {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .status-pane-div {
+        padding: 15px;
+    }
+
+    .terminal {
+        max-height: 150px;
+    }
+
+    button {
+        width: 100%;
+    }
+}

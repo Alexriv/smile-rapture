@@ -1,0 +1,247 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+    color: #007bff; /* Light blue color */
+    margin-bottom: 15px;
+}
+
+p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: white; /* White background */
+    color: #007bff; /* Light blue text */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff; /* Light blue */
+    text-align: center;
+    flex-grow: 1;
+}
+
+.navbar-logo a {
+    color: #007bff; /* Light blue */
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links a {
+    margin: 0 15px;
+    font-size: 16px;
+    color: #007bff; /* Light blue */
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: #007bff;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: 0.3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.profile-options {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-options img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.profile-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-menu a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    font-size: 14px;
+}
+
+.profile-menu a:hover {
+    background-color: #f4f4f4;
+}
+
+/* Main Content */
+.content {
+    padding: 20px;
+    flex: 1; /* Ensures the content area takes up available space */
+}
+
+/* Home Page Specific */
+.home-page {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+.home-page section {
+    margin-bottom: 30px;
+}
+
+.home-page p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #444;
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #f2f2f2;
+    padding: 10px 0;
+    font-size: 14px;
+    margin-top: auto; /* Ensures the footer is pushed to the bottom */
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-section {
+    margin: 10px 0;
+    flex: 1;
+    text-align: center;
+}
+
+.footer-section h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #f2f2f2;
+}
+
+.footer-section ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin: 0 10px;
+}
+
+.footer-section ul li a {
+    color: #f2f2f2;
+    font-size: 14px;
+}
+
+.footer-section ul li a:hover {
+    color: #d1d1d1;
+}
+
+.footer-bottom {
+    background-color: #222;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    color: #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links a {
+        margin: 5px 0;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+
+    .footer-section {
+        margin: 20px 0;
+    }
+
+    .footer-section ul {
+        flex-direction: column;
+    }
+
+    .footer-section ul li {
+        margin: 5px 0;
+    }
+}
+

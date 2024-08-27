@@ -2,44 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>SMILE</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js" integrity="sha384-Gr6Lu2Ajx28mzwyVR8CFkULdCU7kMlZ9UthllibdOSo6qAiN+yXNHqtgdTvFXMT4" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <title>RAPTURE</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/layout.css') }}">
+    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
+    
+    {% block extra_css %}
+    {% endblock %}
 </head>
-<div class="navbar">
-    <a class="nav-title" href="/">RAPTURE</a>
-    <nav>
-        <ul>
-            <li><a href="/new">New Experiment</a></li>
-            <li><a href="/status">Experiment Status</a></li>
-            {% if 'loggedin' in session %}
-                {% if 'admin' in session %}
-                    <li><a href="/admin">Admin</a></li>
-                {% else %}
-                    <li><a href="/account">Account</a></li>
-                {% endif %}
-                <li><a href="/logout">Log Out</a></li>
-            {% else %}
-                <li><a href="/login">Log In</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-</div>
 <body>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="message">
-                <div class="message-text">{{ message }}</div>
-                <div class="close-btn" onclick="this.parentElement.style.display='none';">&times;</div>
-            </div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+    <div class="navbar">
+        <div class="nav-links">
+            <a href="/new">New Experiment</a>
+            <a href="/status">Experiment Status</a>
+        </div>
+        <div class="navbar-logo">
+            <a href="/" style="text-decoration: none;">RAPTURE</a>
+        </div>
+        <div class="profile-options">
+            {% if 'loggedin' in session %}
+                <img src="{{ url_for('static', filename='profile.png') }}" class="profile-icon" onclick="toggleProfileMenu()">
+                <div id="profile-menu" class="profile-menu">
+                    <a href="/profile">Profile</a>
+                    <a href="/logout">Log Out</a>
+                </div>
+            {% else %}
+                <a href="/login">Log In</a>
+            {% endif %}
+        </div>
+    </div>
 
-{% block content %}
-{% endblock %}
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section links">
+                <ul>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section contact">
+                <p>Email: <a href="mailto:support@rapture.com">support@rapture.com</a></p>
+                <p>Phone: +1 (800) 123-4567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 RAPTURE. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>

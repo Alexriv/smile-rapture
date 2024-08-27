@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
+
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/experiment_status_nodes.css') }}">
     <h2>Experiment Status</h2>
     <p>Logged in as <strong>{{ user.name_id }}</strong></p>
     {% if user.experiment_ids %}
@@ -26,3 +28,4 @@
         <p>No experiments are currently available.</p>
     {% endif %}
 {% endblock %}
+

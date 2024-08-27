@@ -1,79 +1,52 @@
 {% extends 'layout.html' %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/experiment_status_nodes.css') }}">
+{% endblock %}
+
 {% block content %}
-    <ul class="status-pane-list">
-        <li class="status-pane-li">
-            <div class="status-pane-div">
-                <h2>{{ experiment.name }}</h2>
-                <p>Created by <strong>{{ experiment.created_by }}</strong> at
-                    <strong>{{ ts_formatted(experiment.created_at) }}</strong></p>
-                <p>UUID: <strong>{{ experiment.experiment_uuid }}</strong></p>
+    <h2>{{ experiment.name }}</h2>
+    <p>Created by <strong>{{ experiment.created_by }}</strong> at <strong>{{ ts_formatted(experiment.created_at) }}</strong></p>
+    <p>UUID: <strong>{{ experiment.experiment_uuid }}</strong></p>
 
-                <div id="status-{{ experiment.experiment_uuid }}"
-                     hx-get="/experiment/{{ experiment.experiment_uuid }}/status/"
-                     hx-trigger="every 1s" hx-target="this">
-                    <div id="status-{{ experiment.experiment_uuid }}">
-                        <p>Status: <strong>{{ experiment.status.name }}</strong></p>
-                    </div>
-                </div>
+    <div id="status-{{ experiment.experiment_uuid }}"
+         hx-get="/experiment/{{ experiment.experiment_uuid }}/status/"
+         hx-trigger="every 1s" hx-target="this">
+        <p>Status: <strong>{{ experiment.status.name }}</strong></p>
+    </div>
 
-                <p>Node Count: <strong>{{ experiment.nodes|length }}</strong></p>
+    <p>Node Count: <strong>{{ experiment.nodes|length }}</strong></p>
 
-                <h4>Results:</h4>
-                <div id="results-{{ experiment.experiment_uuid }}" class="terminal"
-                     hx-get="/experiment/{{ experiment.experiment_uuid }}/results/" hx-trigger="every 1s"
-                     hx-target="this">
-                    {% if experiment.results %}
-                        <div class="terminal">
-                            <div class="log-content">
-                                {% for result in experiment.results %}
-                                    <div>{{ ts_formatted(result.ts) }}: {{ result.data }}</div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% else %}
-                        <p>No results are currently available.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </li>
-        {% for node in experiment.nodes %}
-            {% set node_index = loop %}
-            <li class="status-pane-li">
-                <div class="status-pane-div">
-                    <h2>Node {{ node_index.index }}</h2>
-                    <p>Type: <strong>{{ node.type }}</strong></p>
-                    {% for container in node.containers %}
-                        {% set container_index = loop %}
-                        <div class="status-pane-div"
-                             style="background: #f4f4f4; margin-bottom: 20px; min-width: 300px; width: auto">
-                            <h3 style="margin: 0">Container {{ container_index.index }}</h3>
-                            <p>Name: <strong>{{ container.name }}</strong></p>
-                            <p>Hostname: <strong>{{ container.name }}-svc.{{ experiment.created_by }}</strong></p>
-                            <p>Status: <strong>{{ container.status.name }}</strong></p>
-                            <p>Ports:<strong>{% for port in container.ports %}
-                                {{ port|string }}{% if not loop.last %},{% endif %}{% endfor %}</strong></p>
+    <!-- Experiment Status Icons -->
+    <div class="experiment-status-icons">
+        <span class="status-icon running">
+            <span class="circle green"></span>
+            Running <strong>{{ running_count }}</strong>
+        </span>
+        <span class="status-icon scheduled">
+            <span class="circle yellow"></span>
+            Scheduled <strong>{{ scheduled_count }}</strong>
+        </span>
+        <span class="status-icon completed">
+            <span class="circle grey"></span>
+            Completed <strong>{{ completed_count }}</strong>
+        </span>
+    </div>
 
-                            <h4>stdout log:</h4>
-                            <div id="stdout-{{ container.registry_tag }}" class="terminal"
-                                 hx-get="/experiment/{{ experiment.experiment_uuid }}/{{ container.registry_tag }}/stdout/"
-                                 hx-trigger="every 1s"
-                                 hx-target="this">
-                                {% if container.stdout_log %}
-                                    <div class="terminal">
-                                        <div class="log-content">
-                                            {% for new_out in container.stdout_log %}
-                                                <div>{{ new_out }}</div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                {% else %}
-                                    <p>stdout not currently available.</p>
-                                {% endif %}
-                            </div>
-                        </div>
+    <h4>Results:</h4>
+    <div id="results-{{ experiment.experiment_uuid }}" class="terminal"
+         hx-get="/experiment/{{ experiment.experiment_uuid }}/results/" hx-trigger="every 1s"
+         hx-target="this">
+        {% if experiment.results %}
+            <div class="terminal">
+                <div class="log-content">
+                    {% for result in experiment.results %}
+                        <div>{{ ts_formatted(result.ts) }}: {{ result.data }}</div>
                     {% endfor %}
                 </div>
-            </li>
-        {% endfor %}
-    </ul>
+            </div>
+        {% else %}
+            <p>No results are currently available.</p>
+        {% endif %}
+    </div>
 {% endblock %}

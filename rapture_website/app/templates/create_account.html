@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
     <div class="login">
-        <form action="{{ url_for('create_account') }}" method="post">
+        <form action="{{ url_for('create_account') }}" method="post" enctype="multipart/form-data">
             <h2>Create Account</h2>
 
             <label for="username">Username</label>
@@ -11,8 +12,10 @@
             <input type="email" name="email" placeholder="Email" id="email" required>
 
             <label for="password">Password</label>
-            <input style="margin-bottom: 20px !important;" type="password" name="password" placeholder="Password"
-                   id="password" required>
+            <input type="password" name="password" placeholder="Password" id="password" required>
+
+            <label for="profile_pic">Profile Picture</label>
+            <input type="file" name="profile_pic" id="profile_pic">
 
             <div class="msg">{{ msg }}</div>
             <input type="submit" value="Create Account">
@@ -20,3 +23,4 @@
         </form>
     </div>
 {% endblock %}
+

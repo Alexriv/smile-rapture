@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
+    <div class="profile-page">
+        <h2>Your Profile</h2>
+        <form action="{{ url_for('update_profile') }}" method="post" enctype="multipart/form-data">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            
+            <label for="profile_pic">Profile Picture:</label>
+            <input type="file" id="profile_pic" name="profile_pic">
+
+            <input type="submit" value="Update Profile">
+        </form>
+
+        <div class="usage-tracker">
+            <h3>Monthly Usage</h3>
+            <canvas id="usageChart"></canvas>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='JS/profile.js') }}"></script>
+{% endblock %}
