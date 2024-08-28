@@ -51,7 +51,7 @@ def __generate_image(experiment: Experiment, container: Container):
 
     # build and push container image
     os.system(
-        f"docker buildx build --push --platform linux/arm64,linux/amd64 --tag {current_app.config["REGISTRY_URI"]}/{experiment.created_by}/{container.registry_tag} . --output=type=registry,registry.insecure=true")
+        f"docker buildx build --push --platform linux/arm64,linux/amd64 --tag {current_app.config['REGISTRY_URI']}/{experiment.created_by}/{container.registry_tag} . --output=type=registry,registry.insecure=true")
 
 
 def __create_yaml(experiment: Experiment, containers: list[Container]):
@@ -85,7 +85,7 @@ def __create_yaml(experiment: Experiment, containers: list[Container]):
                     "spec": {
                         "containers": [{
                             "name": container.name,
-                            "image": f"{current_app.config["REGISTRY_URI"]}/{experiment.created_by}/{container.registry_tag}",
+                            "image": f"{current_app.config['REGISTRY_URI']}/{experiment.created_by}/{container.registry_tag}",
                             "imagePullPolicy": "Always"
                         }],
                         "restartPolicy": "Never",
