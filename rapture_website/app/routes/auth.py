@@ -7,13 +7,11 @@ from app.services.db import user_collection
 # Create a Blueprint for auth-related routes
 bp = Blueprint('auth', __name__)
 
-
 @bp.route('/account', methods=['GET'])
 @auth_required
 def account(user: User):
     return render_template("account.html", user=user,
                            exps=Experiment.get_mul_by_id(user.experiment_ids))
-
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -47,7 +45,6 @@ def login():
 
     # Show the login form with message (if any)
     return render_template('login.html')
-
 
 @bp.route('/create_account', methods=['GET', 'POST'])
 def create_account():
@@ -86,6 +83,29 @@ def create_account():
     # Show the creation form with message (if any)
     return render_template('create_account.html')
 
+@bp.route('/profile', methods=['GET'])
+@auth_required
+def profile(user: User):
+    return render_template("profile.html", user=user)
+
+@bp.route('/update_profile', methods=['POST'])
+@auth_required
+def update_profile(user: User):
+    # Update the user's profile based on the form data
+    if 'name' in request.form:
+        user.name = request.form['name']
+    if 'email' in request.form:
+        user.email = request.form['email']
+    if 'password' in request.form and request.form['password']:
+        hashed_password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
+        user.password = hashed_password
+
+    # Save the updated user information to the database
+    user_collection.update_one({'name_id': user.name_id}, {'$set': user.json()})
+
+    # Provide feedback to the user
+    flash("Profile updated successfully.")
+    return redirect(url_for('auth.profile'))
 
 @bp.route('/logout')
 def logout():

@@ -55,6 +55,7 @@ p {
     font-weight: bold;
     color: #007bff; /* Light blue */
     text-align: center;
+    padding-right: 250px;
     flex-grow: 1;
 }
 
@@ -156,58 +157,49 @@ p {
 footer {
     background-color: #333;
     color: #f2f2f2;
-    padding: 10px 0;
-    font-size: 14px;
+    padding: 4px 0; /* Small padding to keep it compact */
+    font-size: 14px; /* Larger font size for readability */
     margin-top: auto; /* Ensures the footer is pushed to the bottom */
 }
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center the content */
     align-items: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.footer-section {
-    margin: 10px 0;
-    flex: 1;
-    text-align: center;
-}
-
-.footer-section h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #f2f2f2;
+    padding: 0 10px; /* Small padding for spacing */
 }
 
 .footer-section ul {
     list-style: none;
-    display: flex;
-    justify-content: center;
     padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the list items */
+    flex-wrap: nowrap;
 }
 
 .footer-section ul li {
-    margin: 0 10px;
+    margin: 0 8px; /* Small margin for list items */
 }
 
-.footer-section ul li a {
+.footer-section ul li a,
+.footer-section ul li span {
     color: #f2f2f2;
-    font-size: 14px;
+    font-size: 14px; /* Keep the font size consistent */
+    text-decoration: none;
 }
 
-.footer-section ul li a:hover {
+.footer-section ul li a:hover,
+.footer-section ul li span:hover {
     color: #d1d1d1;
 }
 
 .footer-bottom {
-    background-color: #222;
-    padding: 10px 0;
+    background-color: #333;
+    padding: 4px 0; /* Small padding */
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
     color: #ccc;
 }
 
@@ -232,10 +224,6 @@ footer {
         flex-direction: column;
     }
 
-    .footer-section {
-        margin: 20px 0;
-    }
-
     .footer-section ul {
         flex-direction: column;
     }
@@ -244,4 +232,3 @@ footer {
         margin: 5px 0;
     }
 }
-

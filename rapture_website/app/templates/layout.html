@@ -22,7 +22,7 @@
             {% if 'loggedin' in session %}
                 <img src="{{ url_for('static', filename='profile.png') }}" class="profile-icon" onclick="toggleProfileMenu()">
                 <div id="profile-menu" class="profile-menu">
-                    <a href="/profile">Profile</a>
+                    <a href="/profile">Account</a>
                     <a href="/logout">Log Out</a>
                 </div>
             {% else %}
@@ -35,7 +35,8 @@
         {% block content %}
         {% endblock %}
     </div>
-    
+
+    <!-- Footer Section -->
     <footer>
         <div class="footer-content">
             <div class="footer-section links">
@@ -44,11 +45,9 @@
                     <li><a href="/contact">Contact</a></li>
                     <li><a href="/privacy">Privacy Policy</a></li>
                     <li><a href="/terms">Terms of Service</a></li>
+                    <li>Email: <a href="mailto:support@rapture.com">support@rapture.com</a></li>
+                    <li>Phone: +1 (800) 123-4567</li>
                 </ul>
-            </div>
-            <div class="footer-section contact">
-                <p>Email: <a href="mailto:support@rapture.com">support@rapture.com</a></p>
-                <p>Phone: +1 (800) 123-4567</p>
             </div>
         </div>
         <div class="footer-bottom">
