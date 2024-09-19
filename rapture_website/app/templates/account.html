@@ -1,12 +1,44 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <div class="status-pane-div">
-        <h2>Account</h2>
-        <div style="margin-left: 15px">
-            <p>Username: <strong>{{ user.name_id }}</strong></p>
-            <p>Email: <strong>{{ user.email }}</strong></p>
-            <p>Active Experiments: <strong>{{ user.experiment_ids|length }}</strong> : <a href="/status">Check
-                Status</a></p>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/profile.css') }}">
+
+    <div class="account-profile-page">
+        <!-- Account Status Section (Left Side) -->
+        <div class="account-status">
+            <h2>Account Details</h2>
+            <div style="margin-left: 15px">
+                <p>Username: <strong>{{ user.name_id }}</strong></p>
+                <p>Email: <strong>{{ user.email }}</strong></p>
+                <p>Active Experiments: <strong>{{ user.experiment_ids|length }}</strong> : <a href="/status">Check Status</a></p>
+            </div>
+        </div>
+
+        <!-- Profile Update Section (Right Side) -->
+        <div class="profile-page">
+            <h2>Update Your Account</h2>
+            <form action="{{ url_for('auth.update_profile') }}" method="post" enctype="multipart/form-data">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="name" value="{{ user.name }}" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+                <small>(Leave blank if you don't want to change your password)</small>
+
+                <label for="profile_pic">Profile Picture:</label>
+                <input type="file" id="profile_pic" name="profile_pic">
+
+                <input type="submit" value="Update Profile">
+            </form>
+
+            <div class="usage-tracker">
+                <h3>Monthly Usage</h3>
+                <canvas id="usageChart"></canvas>
+            </div>
         </div>
     </div>
+
+    <script src="{{ url_for('static', filename='JS/profile.js') }}"></script>
 {% endblock %}

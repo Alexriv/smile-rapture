@@ -22,7 +22,7 @@
             {% if 'loggedin' in session %}
                 <img src="{{ url_for('static', filename='profile.png') }}" class="profile-icon" onclick="toggleProfileMenu()">
                 <div id="profile-menu" class="profile-menu">
-                    <a href="/profile">Account</a>
+                    <a href="/account">Account</a>
                     <a href="/logout">Log Out</a>
                 </div>
             {% else %}
