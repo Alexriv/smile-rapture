@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block content %}
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/learn.css') }}">
+</head>
+
+<iframe
+  src="https://pablo1479.github.io/rapture/lab/index.html?kernel=python"
+  width="100%"
+  height="100%"
+></iframe>
+{% endblock %}

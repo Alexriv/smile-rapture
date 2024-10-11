@@ -13,6 +13,19 @@ def account(user: User):
     return render_template("account.html", user=user,
                            exps=Experiment.get_mul_by_id(user.experiment_ids))
 
+
+@bp.route('/learn', methods=['GET'])
+def learn():
+    # Check if the user is logged in
+    if 'loggedin' in session and 'name_id' in session:
+        # If the user is logged in, redirect them to the /learn page
+        return render_template('learn.html')  # Assuming you have a template for the /learn page
+    else:
+        # If the user is not logged in, redirect them to the login page
+        return redirect(url_for('auth.login'))
+
+
+
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     # Check if user is already logged in
