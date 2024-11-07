@@ -1,3 +1,24 @@
+/* Root Variables for Easy Adjustments */
+:root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --heading-color: #007bff;
+    --paragraph-color: #444;
+    --container-width: 1200px;
+    --padding: 20px;
+    --border-radius: 10px;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --footer-background-color: #333;
+    --footer-text-color: #f2f2f2;
+    --footer-hover-color: #d1d1d1;
+    --footer-secondary-color: #ccc;
+    --font-size: 16px;
+    --line-height: 1.6;
+    --footer-font-size: 14px;
+}
+
 /* General Styles */
 * {
     margin: 0;
@@ -7,37 +28,37 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--text-color);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: var(--container-width);
     margin: 0 auto;
-    padding: 20px;
+    padding: var(--padding);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #007bff; /* Light blue color */
+    color: var(--heading-color);
     margin-bottom: 15px;
 }
 
 p {
     margin-bottom: 20px;
-    line-height: 1.6;
-    font-size: 16px;
-    color: #444;
+    line-height: var(--line-height);
+    font-size: var(--font-size);
+    color: var(--paragraph-color);
 }
 
 /* Learn Page Specific */
 .learn-page {
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     padding: 40px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow);
     margin-bottom: 40px;
 }
 
@@ -46,25 +67,25 @@ p {
 }
 
 .learn-page p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #444;
+    font-size: var(--font-size);
+    line-height: var(--line-height);
+    color: var(--paragraph-color);
 }
 
 .learn-page .btn {
     display: inline-block;
-    background-color: #007bff;
+    background-color: var(--primary-color);
     color: #fff;
     padding: 10px 20px;
     text-align: center;
     border-radius: 5px;
     text-decoration: none;
-    font-size: 16px;
+    font-size: var(--font-size);
     transition: background-color 0.3s;
 }
 
 .learn-page .btn:hover {
-    background-color: #0056b3;
+    background-color: var(--primary-hover-color);
 }
 
 /* Fullscreen iframe container for Jupyter */
@@ -75,22 +96,22 @@ html, body {
 }
 
 .iframe-container {
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
 }
 
 iframe {
     width: 100%;
     height: 100%;
-    border: none; /* Removes the border for a cleaner look */
+    border: none;
 }
 
 /* Footer */
 footer {
-    background-color: #333;
-    color: #f2f2f2;
+    background-color: var(--footer-background-color);
+    color: var(--footer-text-color);
     padding: 10px 0;
     text-align: center;
-    font-size: 14px;
+    font-size: var(--footer-font-size);
     margin-top: auto;
 }
 
@@ -116,21 +137,21 @@ footer {
 }
 
 .footer-section ul li a {
-    color: #f2f2f2;
-    font-size: 14px;
+    color: var(--footer-text-color);
+    font-size: var(--footer-font-size);
     text-decoration: none;
 }
 
 .footer-section ul li a:hover {
-    color: #d1d1d1;
+    color: var(--footer-hover-color);
 }
 
 .footer-bottom {
-    background-color: #333;
+    background-color: var(--footer-background-color);
     padding: 4px 0;
     text-align: center;
-    font-size: 14px;
-    color: #ccc;
+    font-size: var(--footer-font-size);
+    color: var(--footer-secondary-color);
 }
 
 /* Responsive Design */
