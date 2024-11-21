@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, url_for, flash, session, Blueprint
-
 from app.services.auth import bcrypt, auth_required
 from app.models import User, Experiment
 from app.services.db import user_collection
+import time
 
 # Create a Blueprint for auth-related routes
 bp = Blueprint('auth', __name__)
@@ -25,7 +25,6 @@ def learn():
         return redirect(url_for('auth.login'))
 
 
-
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     # Check if user is already logged in
@@ -46,8 +45,6 @@ def login():
             if user.name_id == 'admin':
                 session['admin'] = True
 
-            # session['email'] = user.email
-
             # Redirect to the page the user originally requested or to the account page
             next_page = session.pop('next', url_for('auth.account'))  # Use 'account' as the default
             return redirect(next_page)
@@ -59,47 +56,66 @@ def login():
     # Show the login form with message (if any)
     return render_template('login.html')
 
+
 @bp.route('/create_account', methods=['GET', 'POST'])
 def create_account():
     # Check if user is already logged in
     if 'loggedin' in session or 'name_id' in session:
         return redirect(url_for('auth.account'))
 
-    # Check if "username" and "password" POST requests exist (user submitted form)
-    if (request.method == 'POST' and 'username' in request.form
-            and 'email' in request.form and 'password' in request.form):
-        name_id = str(request.form['username'])
-        email = str(request.form['email'])
+    # Handle form submission
+    if request.method == 'POST':
+        # Extract form data
+        name_id = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
 
-        # Check if username exists
-        if not User.get_by_id(name_id):
-            # Hash the password with bcrypt
-            hashed_password = str(bcrypt.generate_password_hash(str(request.form['password'])).decode('utf-8'))
+        # Validate input
+        if not name_id or not email or not password:
+            flash("Error: All fields are required.")
+            return render_template('create_account.html')
 
-            # Create user object and push to DB
-            user_collection.insert_one(User(name_id=name_id, email=email,
-                                            password=hashed_password).json())
+        # Check if username or email already exists
+        if User.get_by_id(name_id) or user_collection.find_one({"email": email}):
+            flash(f"Error: Username '{name_id}' or email '{email}' already exists.")
+            return render_template('create_account.html')
 
-            # Create session data, we can access this data in other routes
-            session['loggedin'] = True
-            session['name_id'] = name_id
-            # session['email'] = email
+        # Hash the password with bcrypt
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-            # Redirect to the page the user originally requested or to the account page
-            flash(f"Success: Account created successfully")
-            return redirect(session.pop('next', url_for('auth.account')))
+        # Create a new user document
+        new_user = {
+            "name_id": name_id,
+            "email": email,
+            "password": hashed_password,
+            "experiment_ids": [],
+            "admin": False,
+            "created_at": time.time()
+        }
 
-        else:
-            # Invalid login attempt
-            flash(f"Error: Account with username '{name_id}' already exists")
+        # Insert the user into the database
+        try:
+            user_collection.insert_one(new_user)
+        except Exception as e:
+            flash(f"Error: Could not create account. {e}")
+            return render_template('create_account.html')
 
-    # Show the creation form with message (if any)
+        # Set session data
+        session['loggedin'] = True
+        session['name_id'] = name_id
+
+        flash("Success: Account created successfully.")
+        return redirect(url_for('auth.account'))
+
+    # Show the creation form
     return render_template('create_account.html')
+
 
 @bp.route('/profile', methods=['GET'])
 @auth_required
 def profile(user: User):
     return render_template("profile.html", user=user)
+
 
 @bp.route('/update_profile', methods=['POST'])
 @auth_required
@@ -119,6 +135,7 @@ def update_profile(user: User):
     # Provide feedback to the user
     flash("Profile updated successfully.")
     return redirect(url_for('auth.profile'))
+
 
 @bp.route('/logout')
 def logout():
