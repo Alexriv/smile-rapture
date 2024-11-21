@@ -3,36 +3,236 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/learn.css') }}">
     <style>
-        /* Reset margins and paddings */
+        /* General styling */
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%;
-            width: 100%;
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
-            overflow: hidden;
         }
 
-        /* Ensure the iframe adjusts below the navbar */
-        #jupyter-iframe {
-            position: absolute;
-            top: 60px; /* Adjust this value to match the height of your navbar */
-            left: 0;
+        /* Navbar styling */
+        #navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #navbar h1 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        /* Dropdown styling */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            background-color: white;
+            color: #007bff;
             border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown button:hover {
+            background-color: #e7e7e7;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .dropdown-content.active {
+            display: block;
+        }
+
+        .dropdown-content a {
+            color: #007bff;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f4f6f8;
+        }
+
+        /* Assignments container */
+        .assignments {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+            gap: 20px;
+        }
+
+        /* Assignment card */
+        .assignment-card {
+            background-color: white;
+            width: 300px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .assignment-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .assignment-card p {
+            margin: 0 0 10px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .assignment-card button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .assignment-card button:hover {
+            background-color: #0056b3;
+        }
+
+        .assignment-card.locked {
+            background-color: #e7e7e7;
+        }
+
+        .assignment-card.locked button {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Iframe for assignment display */
+        #jupyter-iframe {
             width: 100%;
-            height: calc(100vh - 60px); /* Subtract navbar height from viewport height */
+            height: 500px;
+            border: none;
+            margin-top: 20px;
+            display: none; /* Hidden by default, shown when an assignment is loaded */
         }
     </style>
 </head>
 
 <body>
-    <!-- JupyterLite iframe -->
-    <iframe
-        id="jupyter-iframe"
-        src="https://pablo1479.github.io/rapture/lab/index.html?kernel=python"
-        width="100%"
-        height="100%"
-    ></iframe>
+    <!-- Navbar -->
+    <div id="navbar">
+        <h1>Learn Dashboard</h1>
+        <div class="dropdown">
+            <button onclick="toggleDropdown()">Select Catalog</button>
+            <div class="dropdown-content" id="catalog-dropdown">
+                <a href="#" onclick="showAssignments('fall2024')">Fall 2024</a>
+                <a href="#" onclick="showAssignments('spring2025')">Spring 2025</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assignments container -->
+    <div class="assignments" id="assignments-container"></div>
+
+    <!-- Iframe for assignment display -->
+    <iframe id="jupyter-iframe"></iframe>
+
+    <script>
+        const assignments = [
+            { 
+                title: "Python Basics with NumPy", 
+                file: "Python_Basics_With_Numpy_v3a.ipynb", 
+                unlock: "2024-09-01", 
+                lock: "2024-10-01" 
+            },
+            { 
+                title: "Planar Data Classification", 
+                file: "Planar_data_classification_with_onehidden_layer_v6c.ipynb", 
+                unlock: "2024-10-02", 
+                lock: "2024-11-01" 
+            },
+            { 
+                title: "Logistic Regression", 
+                file: "Logistic_Regression_with_a_Neural_Network_mindset_v6a.ipynb", 
+                unlock: "2024-11-02", 
+                lock: "2024-12-01" 
+            },
+            { 
+                title: "Building Your Deep Neural Network", 
+                file: "Building_your_Deep_Neural_Network_Step_by_Step_v8a.ipynb", 
+                unlock: "2025-01-10", 
+                lock: "2025-02-10" 
+            },
+            { 
+                title: "Deep Neural Network Application", 
+                file: "Deep_Neural_Network_Application_v8.ipynb", 
+                unlock: "2025-02-11", 
+                lock: "2025-03-15" 
+            }
+        ];
+
+        // Toggle dropdown visibility
+        function toggleDropdown() {
+            const dropdown = document.getElementById("catalog-dropdown");
+            dropdown.classList.toggle("active");
+        }
+
+        // Show assignments for the selected catalog
+        function showAssignments(catalog) {
+            const container = document.getElementById("assignments-container");
+            container.innerHTML = ""; // Clear current assignments
+            const today = new Date();
+
+            assignments.forEach(assignment => {
+                const unlockDate = new Date(assignment.unlock);
+                const lockDate = new Date(assignment.lock);
+
+                const isLocked = today < unlockDate || today > lockDate;
+
+                const card = document.createElement("div");
+                card.className = `assignment-card ${isLocked ? "locked" : ""}`;
+
+                card.innerHTML = `
+                    <h3>${assignment.title}</h3>
+                    <p>Available: ${unlockDate.toDateString()} - ${lockDate.toDateString()}</p>
+                    <button ${isLocked ? "disabled" : ""} onclick="startAssignment('${assignment.file}')">
+                        ${isLocked ? "Locked" : "Start Assignment"}
+                    </button>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Start assignment and load it in the iframe
+        function startAssignment(notebookFile) {
+            const iframe = document.getElementById("jupyter-iframe");
+            iframe.src = `https://pablo1479.github.io/rapture/lab/index.html?path=assignments/${notebookFile}`;
+            iframe.style.display = "block";
+            window.scrollTo(0, iframe.offsetTop); // Scroll to the iframe when it's displayed
+        }
+
+        // Load initial catalog
+        showAssignments('fall2024');
+    </script>
 </body>
 {% endblock %}
