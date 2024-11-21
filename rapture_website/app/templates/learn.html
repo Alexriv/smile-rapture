@@ -3,7 +3,7 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='CSS/learn.css') }}">
     <style>
-        /* Ensure the page takes the full viewport */
+        /* Reset margins and paddings */
         html, body {
             margin: 0;
             padding: 0;
@@ -14,119 +14,25 @@
             overflow: hidden;
         }
 
-        /* Fullscreen container for the JupyterLite iframe */
-        #main-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-            background-color: #f4f6f8;
-        }
-
-        /* Instruction and button bar */
-        #assignment-container {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2em;
-        }
-
-        #start-assignment {
-            background-color: white;
-            color: #007bff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1em;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #start-assignment:hover {
-            background-color: #e7e7e7;
-        }
-
-        /* Fullscreen iframe for JupyterLite */
+        /* Ensure the iframe adjusts below the navbar */
         #jupyter-iframe {
-            flex-grow: 1;
+            position: absolute;
+            top: 60px; /* Adjust this value to match the height of your navbar */
+            left: 0;
             border: none;
             width: 100%;
-            height: calc(100vh - 60px); /* Adjust height to account for the header */
+            height: calc(100vh - 60px); /* Subtract navbar height from viewport height */
         }
     </style>
 </head>
 
 <body>
-<div id="main-container">
-    <!-- Instructions and button container at the top -->
-    <div id="assignment-container">
-        <p id="instructions">Complete each assignment to unlock the next.</p>
-        <button id="start-assignment" onclick="loadAssignment('Python_Basics_With_Numpy_v3a.ipynb')">Start Assignment 1</button>
-    </div>
-
-    <!-- Fullscreen JupyterLite iframe -->
+    <!-- JupyterLite iframe -->
     <iframe
         id="jupyter-iframe"
         src="https://pablo1479.github.io/rapture/lab/index.html?kernel=python"
         width="100%"
         height="100%"
     ></iframe>
-</div>
-
-<script>
-    const assignments = [
-        'Python_Basics_With_Numpy_v3a.ipynb',
-        'Planar_data_classification_with_onehidden_layer_v6c.ipynb',
-        'Logistic_Regression_with_a_Neural_Network_mindset_v6a.ipynb',
-        'Building_your_Deep_Neural_Network_Step_by_Step_v8a.ipynb',
-        'Deep_Neural_Network_Application_v8.ipynb'
-    ];
-
-    function checkProgress() {
-        const completedAssignments = JSON.parse(localStorage.getItem("completedAssignments") || "{}");
-
-        let nextAssignment = 0;
-        while (completedAssignments[assignments[nextAssignment]]) {
-            nextAssignment++;
-        }
-
-        if (nextAssignment < assignments.length) {
-            document.getElementById("start-assignment").innerText = `Start Assignment ${nextAssignment + 1}`;
-            document.getElementById("start-assignment").onclick = () => loadAssignment(assignments[nextAssignment]);
-        } else {
-            document.getElementById("instructions").innerText = "All assignments completed! Great job!";
-            document.getElementById("start-assignment").style.display = "none";
-        }
-    }
-
-    function loadAssignment(notebookName) {
-    const iframe = document.getElementById("jupyter-iframe");
-    iframe.src = `https://pablo1479.github.io/rapture/lab/index.html?path=assignments/${notebookName}`;
-    iframe.style.display = "block";
-    document.getElementById("instructions").innerText = `Complete ${notebookName.replace('.ipynb', '')} to unlock the next assignment.`;
-
-        // Add a mock button for marking the assignment complete
-        setTimeout(() => {
-            const markButton = document.createElement("button");
-            markButton.innerText = "Mark Complete";
-            markButton.onclick = () => markComplete(notebookName);
-            document.getElementById("assignment-container").appendChild(markButton);
-        }, 500);
-    }
-
-    function markComplete(notebookName) {
-        const completedAssignments = JSON.parse(localStorage.getItem("completedAssignments") || "{}");
-        completedAssignments[notebookName] = true;
-        localStorage.setItem("completedAssignments", JSON.stringify(completedAssignments));
-        checkProgress();
-    }
-
-    checkProgress();
-</script>
 </body>
 {% endblock %}
-
-
