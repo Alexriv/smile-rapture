@@ -129,7 +129,7 @@
         /* Iframe for assignment display */
         #jupyter-iframe {
             width: 100%;
-            height: 500px;
+            height: 600px;
             border: none;
             margin-top: 20px;
             display: none; /* Hidden by default, shown when an assignment is loaded */
@@ -160,46 +160,44 @@
         const assignments = [
             { 
                 title: "Python Basics with NumPy", 
-                file: "Python_Basics_With_Numpy_v3a.ipynb", 
+                file: "Fixed_Python_Basics_With_Numpy.html", 
                 unlock: "2024-09-01", 
                 lock: "2024-10-01" 
             },
             { 
                 title: "Planar Data Classification", 
-                file: "Planar_data_classification_with_onehidden_layer_v6c.ipynb", 
+                file: "Fixed_Planar_Data_Classification.html", 
                 unlock: "2024-10-02", 
                 lock: "2024-11-01" 
             },
             { 
                 title: "Logistic Regression", 
-                file: "Logistic_Regression_with_a_Neural_Network_mindset_v6a.ipynb", 
+                file: "Fixed_Logistic_Regression.html", 
                 unlock: "2024-11-02", 
                 lock: "2024-12-01" 
             },
             { 
                 title: "Building Your Deep Neural Network", 
-                file: "Building_your_Deep_Neural_Network_Step_by_Step_v8a.ipynb", 
+                file: "Fixed_Building_your_Deep_Neural_Network.html", 
                 unlock: "2025-01-10", 
                 lock: "2025-02-10" 
             },
             { 
                 title: "Deep Neural Network Application", 
-                file: "Deep_Neural_Network_Application_v8.ipynb", 
+                file: "Fixed_Deep_Neural_Network_Application.html", 
                 unlock: "2025-02-11", 
                 lock: "2025-03-15" 
             }
         ];
 
-        // Toggle dropdown visibility
         function toggleDropdown() {
             const dropdown = document.getElementById("catalog-dropdown");
             dropdown.classList.toggle("active");
         }
 
-        // Show assignments for the selected catalog
         function showAssignments(catalog) {
             const container = document.getElementById("assignments-container");
-            container.innerHTML = ""; // Clear current assignments
+            container.innerHTML = ""; 
             const today = new Date();
 
             assignments.forEach(assignment => {
@@ -223,10 +221,9 @@
             });
         }
 
-        // Start assignment and load it in the iframe
         function startAssignment(notebookFile) {
             const iframe = document.getElementById("jupyter-iframe");
-            iframe.src = `https://pablo1479.github.io/rapture/lab/index.html?path=assignments/${notebookFile}`;
+            iframe.src = `/assignments/${notebookFile}`;
             iframe.style.display = "block";
             window.scrollTo(0, iframe.offsetTop); // Scroll to the iframe when it's displayed
         }
@@ -236,3 +233,4 @@
     </script>
 </body>
 {% endblock %}
+
