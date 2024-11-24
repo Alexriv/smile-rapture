@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, g, session
 from flask_socketio import SocketIO
 from flask_htmx import HTMX
 
@@ -65,6 +65,25 @@ def create_app(config_class=Config):
     def serve_assignments(filename):
         assignments_directory = r"C:\Users\alexr\OneDrive\Documents\GitHub\smile-rapture\assignments"
         return send_from_directory(assignments_directory, filename)
+
+    # Add a global `user` object
+    from app.services.db import user_collection
+
+    @app.before_request
+    def load_logged_in_user():
+        """
+        Load the current user (if logged in) into the global `g` context before every request.
+        """
+        g.user = None
+        if 'loggedin' in session and 'name_id' in session:
+            g.user = user_collection.find_one({"name_id": session['name_id']})
+
+    @app.context_processor
+    def inject_user():
+        """
+        Inject the `user` object into all templates.
+        """
+        return {"user": g.user}
 
     # SocketIO imports
     from app.routes.api.node import update_node_type, exp_status_request, start_exp_press
