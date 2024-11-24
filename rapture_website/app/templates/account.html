@@ -18,17 +18,17 @@
             <h2>Update Your Account</h2>
             <form action="{{ url_for('auth.update_profile') }}" method="post" enctype="multipart/form-data">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="name" value="{{ user.name }}" required>
+                <input type="text" id="username" name="name" value="{{ user.name }}" >
 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                <input type="email" id="email" name="email" value="{{ user.email }}" >
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password">
                 <small>(Leave blank if you don't want to change your password)</small>
 
-                <label for="profile_pic">Profile Picture:</label>
-                <input type="file" id="profile_pic" name="profile_pic">
+                <!-- <label for="profile_pic">Profile Picture:</label>
+                <input type="file" id="profile_pic" name="profile_pic">  -->
 
                 <input type="submit" value="Update Profile">
             </form>

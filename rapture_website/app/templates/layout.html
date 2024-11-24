@@ -10,28 +10,47 @@
     {% endblock %}
 </head>
 <body>
+    <!-- Navbar -->
     <div class="navbar">
-        <div class="nav-links">
-            <a href="/new">New Experiment</a>
-            <a href="/status">Experiment Status</a>
-            <a href="/learn">Learn</a>
+        <!-- Dropdown Menu -->
+        <div class="dropdown">
+            <button class="dropdown-button">Research</button>
+            <div class="dropdown-content">
+                <a href="/new">New Experiment</a>
+                <a href="/status">Experiment Status</a>
+            </div>
         </div>
+
+        <!-- Logo Section -->
         <div class="navbar-logo">
-            <a href="/" style="text-decoration: none;">RAPTURE</a>
+            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">RAPTURE</a>
         </div>
+        
+
+        <!-- Profile Options -->
         <div class="profile-options">
+            <a href="/learn" class="learn-link">Learn</a>
             {% if 'loggedin' in session %}
-                <img src="{{ url_for('static', filename='profile.png') }}" class="profile-icon" onclick="toggleProfileMenu()">
+                <!-- Show User's Profile Picture -->
+                <img 
+                    src="{{ url_for('static', filename=user.profile_pic or 'images/usericon.jpg') }}" 
+                    class="profile-icon" 
+                    alt="Profile Picture" 
+                    onclick="toggleProfileMenu()">
+                
+                <!-- Profile Menu -->
                 <div id="profile-menu" class="profile-menu">
                     <a href="/account">Account</a>
                     <a href="/logout">Log Out</a>
                 </div>
             {% else %}
+                <!-- Show Login Option -->
                 <a href="/login">Log In</a>
             {% endif %}
         </div>
     </div>
 
+    <!-- Content Section -->
     <div class="content">
         {% block content %}
         {% endblock %}

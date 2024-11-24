@@ -55,8 +55,10 @@ p {
     font-weight: bold;
     color: #007bff; /* Light blue */
     text-align: center;
-    padding-right: 250px;
-    flex-grow: 1;
+    flex-grow: 1; /* Ensures it takes available space */
+    display: flex;
+    justify-content: center; /* Centers the content horizontally */
+    align-items: center; /* Centers the content vertically */
 }
 
 .navbar-logo a {
@@ -64,38 +66,78 @@ p {
     text-decoration: none;
 }
 
-.nav-links {
-    display: flex;
-    align-items: center;
-}
-
-.nav-links a {
-    margin: 0 15px;
-    font-size: 16px;
-    color: #007bff; /* Light blue */
-    padding-bottom: 5px;
+/* Dropdown Menu */
+.dropdown {
     position: relative;
+    display: inline-block;
 }
 
-.nav-links a::after {
-    content: '';
-    width: 0%;
-    height: 2px;
-    background: #007bff;
+.dropdown-button {
+    background-color: white;
+    color: #007bff;
+    font-size: 16px;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-button:hover {
+    background-color: #f4f4f4;
+    border-radius: 4px;
+}
+
+.dropdown-content {
+    display: none;
     position: absolute;
-    left: 0;
-    bottom: 0;
-    transition: 0.3s;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.nav-links a:hover::after {
-    width: 100%;
+.dropdown-content a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
+.dropdown-content a:hover {
+    background-color: #f4f4f4;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Profile Options */
 .profile-options {
     position: relative;
     display: flex;
     align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Learn Button */
+.learn-link {
+    margin-right: 20px; /* Add spacing between the learn link and profile options */
+    font-size: 16px;
+    color: #007bff; /* Light blue */
+    text-decoration: none;
+    padding: 5px 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.learn-link:hover {
+    background-color: #f4f4f4;
+    border-radius: 4px;
 }
 
 .profile-options img {
@@ -132,25 +174,6 @@ p {
 .content {
     padding: 20px;
     flex: 1; /* Ensures the content area takes up available space */
-}
-
-/* Home Page Specific */
-.home-page {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 40px;
-}
-
-.home-page section {
-    margin-bottom: 30px;
-}
-
-.home-page p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #444;
 }
 
 /* Footer */
@@ -220,15 +243,20 @@ footer {
         margin: 5px 0;
     }
 
-    .footer-content {
+    .profile-options {
         flex-direction: column;
     }
 
-    .footer-section ul {
-        flex-direction: column;
+    .learn-link {
+        margin: 10px 0;
     }
 
-    .footer-section ul li {
-        margin: 5px 0;
+    .dropdown-content {
+        position: static;
+        width: 100%;
+    }
+
+    .dropdown-content a {
+        text-align: center;
     }
 }

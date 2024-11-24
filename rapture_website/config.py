@@ -11,6 +11,7 @@ class Config:
     UPLOAD_FOLDER = os.path.join(os.getcwd(), "uploads/")
     SECRET_KEY = os.urandom(24).hex()
     REGISTRY_URI = "130.191.162.166:5000"
+    DEFAULT_PROFILE_PIC = "images/usericon.jpg"
 
     VALID_IMAGES = ["python:latest", "python:3.10-bullseye", "python:3.12-bookworm", "python:3.11-bookworm"]
     NODE_TYPES = [node_type.name for node_type in NodeType]
