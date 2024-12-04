@@ -174,7 +174,7 @@
                 title: "Logistic Regression", 
                 file: "Fixed_Logistic_Regression.html", 
                 unlock: "2024-12-01", 
-                lock: "2024-12-01" 
+                lock: "2025-12-01" 
             },
             { 
                 title: "Building Your Deep Neural Network", 
@@ -204,6 +204,9 @@
                 const unlockDate = new Date(assignment.unlock);
                 const lockDate = new Date(assignment.lock);
 
+                console.log(`Assignment: ${assignment.title}, Unlock: ${unlockDate}, Lock: ${lockDate}`);
+
+                // Temporarily disable locking for debugging
                 const isLocked = today < unlockDate || today > lockDate;
 
                 const card = document.createElement("div");
@@ -223,9 +226,11 @@
 
         function startAssignment(notebookFile) {
             const iframe = document.getElementById("jupyter-iframe");
-            iframe.src = `/assignments/${notebookFile}`;
+            const filePath = `/assignments/${notebookFile}`;
+            console.log(`Loading file: ${filePath}`); // Debugging log
+            iframe.src = filePath;
             iframe.style.display = "block";
-            window.scrollTo(0, iframe.offsetTop); // Scroll to the iframe when it's displayed
+            window.scrollTo(0, iframe.offsetTop);
         }
 
         // Load initial catalog
@@ -233,4 +238,3 @@
     </script>
 </body>
 {% endblock %}
-
