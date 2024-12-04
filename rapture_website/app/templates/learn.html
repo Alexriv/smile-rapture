@@ -206,7 +206,6 @@
 
                 console.log(`Assignment: ${assignment.title}, Unlock: ${unlockDate}, Lock: ${lockDate}`);
 
-                // Temporarily disable locking for debugging
                 const isLocked = today < unlockDate || today > lockDate;
 
                 const card = document.createElement("div");
@@ -227,7 +226,7 @@
         function startAssignment(notebookFile) {
             const iframe = document.getElementById("jupyter-iframe");
             const filePath = `/assignments/${notebookFile}`;
-            console.log(`Loading file: ${filePath}`); // Debugging log
+            console.log(`Loading file: ${filePath}`);
             iframe.src = filePath;
             iframe.style.display = "block";
             window.scrollTo(0, iframe.offsetTop);
@@ -238,3 +237,4 @@
     </script>
 </body>
 {% endblock %}
+
