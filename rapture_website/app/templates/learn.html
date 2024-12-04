@@ -225,7 +225,7 @@
 
         function startAssignment(notebookFile) {
             const iframe = document.getElementById("jupyter-iframe");
-            const filePath = `/assignments/${notebookFile}`;
+            const filePath = `https://alexriv.github.io/smile-rapture/assignments/${notebookFile}`;
             console.log(`Loading file: ${filePath}`);
             iframe.src = filePath;
             iframe.style.display = "block";
@@ -237,4 +237,5 @@
     </script>
 </body>
 {% endblock %}
+
 
