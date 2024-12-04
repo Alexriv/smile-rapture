@@ -17,3 +17,14 @@ window.onclick = function(event) {
         }
     }
 }
+
+
+function toggleMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    navLinks.classList.toggle('active');
+}
+
+function toggleProfileMenu() {
+    const profileMenu = document.getElementById('profile-menu');
+    profileMenu.classList.toggle('active');
+}
