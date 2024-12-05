@@ -24,7 +24,7 @@ function toggleMenu() {
     navLinks.classList.toggle('active');
 }
 
-function toggleProfileMenu() {
+//function toggleProfileMenu() {
     const profileMenu = document.getElementById('profile-menu');
     profileMenu.classList.toggle('active');
-}
+//}

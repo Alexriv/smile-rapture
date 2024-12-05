@@ -4,9 +4,41 @@ from app.models import User, Experiment
 from app.services.db import user_collection
 import time
 import os
+from flask import jsonify
+from datetime import datetime
 
 # Create a Blueprint for auth-related routes
 bp = Blueprint('auth', __name__)
+
+
+
+
+@bp.route('/log_assignment', methods=['POST'])
+@auth_required
+def log_assignment(user: User):
+    # Extract data from the request
+    data = request.json
+    assignment_title = data.get('assignment_title')
+
+    if not assignment_title:
+        return jsonify({"error": "Assignment title is required"}), 400
+
+    # Log the assignment start in the database
+    log_entry = {
+        "user_id": user.name_id,
+        "assignment_title": assignment_title,
+        "timestamp": datetime.utcnow()
+    }
+    try:
+        user_collection.update_one(
+            {"name_id": user.name_id},
+            {"$push": {"assignment_logs": log_entry}}
+        )
+        return jsonify({"success": "Assignment logged successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 
 @bp.route('/account', methods=['GET'])
 @auth_required
@@ -42,6 +74,83 @@ def login():
 
     return render_template('login.html')
 
+
+
+@bp.route('/teacher', methods=['GET'])
+@auth_required
+def teacher_dashboard(user: User):
+    if not session.get('admin', False):
+        flash("Error: Unauthorized access.")
+        return redirect(url_for('auth.account'))
+
+    # Fetch logs with user details
+    logs = user_collection.aggregate([
+        {"$unwind": "$assignment_logs"},
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "assignment_logs.user_id",
+                "foreignField": "name_id",
+                "as": "user_details"
+            }
+        },
+        {"$unwind": "$user_details"},
+        {
+            "$group": {
+                "_id": "$assignment_logs.user_id",
+                "email": {"$first": "$user_details.email"},
+                "assignments": {"$push": "$assignment_logs"}
+            }
+        }
+    ])
+
+    grouped_logs = {
+        log["_id"]: {"email": log["email"], "assignments": log["assignments"]}
+        for log in logs
+    }
+
+    return render_template(
+        "teacher.html",
+        user=user,
+        logs=grouped_logs
+    )
+
+'''@bp.route('/teacher', methods=['GET'])
+@auth_required
+def teacher_dashboard(user: User):
+    if not session.get('admin', False):
+        flash("Error: Unauthorized access.")
+        return redirect(url_for('auth.account'))
+
+    # Fetch logs of assignments started
+    logs = list(user_collection.aggregate([
+        {"$unwind": "$assignment_logs"},
+        {"$project": {"_id": 0, "user_id": "$name_id", "assignment": "$assignment_logs"}}
+    ]))
+
+    return render_template(
+        "teacher.html",
+        user=user,
+        logs=logs
+    )
+'''
+
+'''@bp.route('/teacher', methods=['GET'])
+@auth_required
+def teacher_dashboard(user: User):
+    if not session.get('admin', False):
+        flash("Error: Unauthorized access.")
+        return redirect(url_for('auth.account'))
+    
+    # Fetch students who have started an assignment
+    students = list(user_collection.find({"experiment_ids": {"$ne": []}}, {"_id": 0, "name_id": 1, "email": 1}))
+    
+    return render_template(
+        "teacher.html",
+        user=user,
+        students=students
+    )
+'''
 
 @bp.route('/create_account', methods=['GET', 'POST'])
 def create_account():

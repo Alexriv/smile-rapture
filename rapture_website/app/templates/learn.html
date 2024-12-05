@@ -222,7 +222,6 @@
                 container.appendChild(card);
             });
         }
-
         function startAssignment(notebookFile) {
             const iframe = document.getElementById("jupyter-iframe");
             const filePath = `https://alexriv.github.io/smile-rapture/assignments/${notebookFile}`;
@@ -230,8 +229,39 @@
             iframe.src = filePath;
             iframe.style.display = "block";
             window.scrollTo(0, iframe.offsetTop);
+
+            // Extract assignment title based on the file name
+            const assignment = assignments.find(a => a.file === notebookFile);
+            const assignmentTitle = assignment ? assignment.title : notebookFile;
+
+            // Log the assignment start to the backend
+            fetch('/log_assignment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ assignment_title: assignmentTitle })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error logging assignment:', data.error);
+                } else {
+                    console.log('Assignment logged successfully:', data);
+                }
+            })
+            .catch(error => console.error('Fetch error:', error));
         }
 
+       /* function startAssignment(notebookFile) {
+            const iframe = document.getElementById("jupyter-iframe");
+            const filePath = `https://alexriv.github.io/smile-rapture/assignments/${notebookFile}`;
+            console.log(`Loading file: ${filePath}`);
+            iframe.src = filePath;
+            iframe.style.display = "block";
+            window.scrollTo(0, iframe.offsetTop);
+        }
+*/
         // Load initial catalog
         showAssignments('fall2024');
     </script>

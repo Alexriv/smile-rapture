@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/teacher.css') }}">
+    <div class="teacher-dashboard">
+        <h2>Teacher Dashboard</h2>
+        <h3>Students Who Have Started Assignments</h3>
+
+        {% if logs %}
+            <div class="student-cards">
+                {% for student_id, student_data in logs.items() %}
+                    <div class="student-card">
+                        <h4>{{ student_id }}</h4>
+                        <p><strong>Email:</strong> {{ student_data.email }}</p>
+                        <hr>
+                        <ul class="assignments-list">
+                            {% for assignment in student_data.assignments %}
+                                <li>
+                                    <strong>Assignment:</strong> {{ assignment.assignment_title }} <br>
+                                    <strong>Started On:</strong> {{ assignment.timestamp }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No students have started assignments yet.</p>
+        {% endif %}
+    </div>
+{% endblock %}
