@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 
 # Replace <username>, <password>, and <cluster-url> with your Atlas credentials
-mongo_client = MongoClient("mongodb+srv://pablotest:pablotest@smilelab-rapture.g4m2g.mongodb.net/")
+mongo_client = MongoClient("mongodb+srv://pablotest:rapture2025@smilelab-rapture.g4m2g.mongodb.net/")
 
 # Connect to the "user_db" database
 db = mongo_client["user_db"]
