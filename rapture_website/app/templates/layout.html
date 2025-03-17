@@ -2,77 +2,268 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAPTURE</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/layout.css') }}">
-    <script src="{{ url_for('static', filename='JS/main.js') }}"></script>
-    
-    {% block extra_css %}
-    {% endblock %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #007bff, #e3f2fd);
+            color: #222;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .dark-mode {
+            background: linear-gradient(to bottom, #000000, #1a1a1a);
+            color: #f9f9f9;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: white;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .dark-mode .navbar {
+            background-color: #1e1e1e;
+        }
+
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .dropdown button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            min-width: 200px;
+            z-index: 1000;
+        }
+        .dropdown-content a {
+            display: block;
+            padding: 12px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        .dropdown-content a:hover {
+            background: #e3f2fd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Navigation Buttons */
+        .nav-button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease, transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Dark Mode Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #007bff;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 100px 20px;
+            color: white;
+            background: linear-gradient(to bottom, #007bff, #0056b3);
+        }
+        .dark-mode .hero-section {
+            background: linear-gradient(to bottom, #000000, #1a1a1a);
+        }
+
+        /* Feature Cards */
+        .feature-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            text-align: center;
+            padding: 50px 20px;
+            background: #ffffff;
+        }
+        .dark-mode .feature-section {
+            background: #121212;
+        }
+        .feature-card {
+            flex: 1 1 300px;
+            max-width: 320px;
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .dark-mode .feature-card {
+            background: #1e1e1e;
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .dark-mode .footer {
+            background: #000000;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleSwitch = document.getElementById("darkModeToggle");
+            const body = document.body;
+            
+            // Load saved mode
+            if (localStorage.getItem("darkMode") === "enabled") {
+                body.classList.add("dark-mode");
+                toggleSwitch.checked = true;
+            }
+
+            toggleSwitch.addEventListener("change", function () {
+                if (this.checked) {
+                    body.classList.add("dark-mode");
+                    localStorage.setItem("darkMode", "enabled");
+                } else {
+                    body.classList.remove("dark-mode");
+                    localStorage.setItem("darkMode", "disabled");
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <!-- Navbar -->
     <div class="navbar">
-        <!-- Dropdown Menu -->
-        <div class="dropdown">
-            <button class="dropdown-button">Research</button>
-            <div class="dropdown-content">
-                <a href="/new">New Experiment</a>
-                <a href="/status">Experiment Status</a>
-            </div>
-        </div>
-
-        <!-- Logo Section -->
-        <div class="navbar-logo">
-            <a href="{{ url_for('main.index') }}" style="text-decoration: none;">RAPTURE</a>
-        </div>
-        
-
-        <!-- Profile Options -->
-        <div class="profile-options">
-            <a href="/learn" class="learn-link">Learn</a>
-            {% if 'loggedin' in session %}
-                <!-- Show User's Profile Picture -->
-                <img 
-                    src="{{ url_for('static', filename=user.profile_pic or 'images/usericon.jpg') }}" 
-                    class="profile-icon" 
-                    alt="Profile Picture" 
-                    onclick="toggleProfileMenu()">
-                
-                <!-- Profile Menu -->
-                <div id="profile-menu" class="profile-menu">
-                    <a href="/account">Account</a>
-                    <a href="/logout">Log Out</a>
+        <div class="navbar-left">
+            <div class="dropdown">
+                <button>Research & Learn ▼</button>
+                <div class="dropdown-content">
+                    <a href="/new">New Experiment</a>
+                    <a href="/status">Experiment Status</a>
+                    <a href="/learn">Learn</a>
                 </div>
-            {% else %}
-                <!-- Show Login Option -->
-                <a href="/login">Log In</a>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Content Section -->
-    <div class="content">
-        {% block content %}
-        {% endblock %}
-    </div>
-
-    <!-- Footer Section -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section links">
-                <ul>
-                    <li><a href="/about">About Us</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                    <li><a href="/privacy">Privacy Policy</a></li>
-                    <li><a href="/terms">Terms of Service</a></li>
-                    <li>Email: <a href="mailto:support@rapture.com">support@rapture.com</a></li>
-                    <li>Phone: +1 (800) 123-4567</li>
-                </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 RAPTURE. All rights reserved.</p>
+        <div class="navbar-right">
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+            <a href="/login" class="nav-button">Log In</a>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h1>Revolutionizing UAS Research & Education</h1>
+        <p>Remote Access | Real-World Testing | Seamless Innovation</p>
+        <a href="/learn" class="nav-button">Get Started</a>
+    </div>
+
+    <div class="feature-section">
+        <div class="feature-card"><h3>Seamless Integration</h3><p>Easily integrate with existing workflows and automate tasks.</p></div>
+        <div class="feature-card"><h3>Real-Time Analytics</h3><p>Get instant data insights and predictive modeling.</p></div>
+        <div class="feature-card"><h3>Scalable Solutions</h3><p>Grow with flexible, high-performance resources.</p></div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="/about">About</a>
+            <a href="/support">Support</a>
+            <a href="/terms">Terms of Service</a>
         </div>
     </footer>
 </body>
 </html>
+
